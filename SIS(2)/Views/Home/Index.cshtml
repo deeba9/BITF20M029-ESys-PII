@@ -1,0 +1,579 @@
+﻿@{
+    ViewBag.Title = "DashBoard";
+}
+@using Microsoft.AspNetCore.Mvc.ViewFeatures
+@{
+    // Assuming ViewBag.SubmissionChart is a List<dynamic> with 'Date' and 'Count' properties
+    var chartData = ViewBag.ChartData;
+    var submissionData = @ViewBag.SubmissionChart;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .chart-container {
+            flex: 0 0 calc(33.33% - 20px); /* Adjust the width as needed */
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .full-width-chart-container {
+            flex: 0 0 100%; /* Takes full width */
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        .status-grid {
+            flex: 0 0 60%;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .activity-list {
+            margin-top: 20px;
+        }
+
+        .activity-lists-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .activity-list {
+            flex: 0 0 calc(33.33% - 20px);
+        }
+        /* Add this to your existing styles or create a new stylesheet */
+        .green-tile {
+            background-color: #32549D;
+            color: white;
+            padding: 10px;
+            margin: 0px;
+           width:15%;
+            display: inline-block;
+        }
+
+        .red-tile {
+            background-color: #32549D;
+            color: white;
+            padding: 10px;
+            margin: 0px;
+            width: 15%;
+            display: inline-block;
+        }
+        /* Add this to your existing styles or create a new stylesheet */
+        /* Add this to your existing styles or create a new stylesheet */
+        .count-box {
+            font-size: 30px;
+            color: #32549D;
+           
+            width : fit-content;
+            height: fit-content;
+            /* Adjust background color as needed */
+        }
+
+
+    </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.1/dist/apexcharts.min.css" />
+   
+</head>
+<body>
+ 
+  <div class="dashboard-container">
+            <h3>Top 5 Interests: </h3>
+            @foreach (var interest in ViewBag.Top5Interests)
+            {
+                <div class="green-tile">@interest</div>
+            }
+    </div>
+    <div class="dashboard-container">
+        <h3>Bottom 5 Interests:</h3>
+        @foreach (var interest in ViewBag.Bottom5Interests)
+        {
+            <div class="red-tile">@interest</div>
+        }
+    </div>
+    
+    <div class="dashboard-container">
+       
+        <!-- Department Distribution Chart -->
+        <div class="chart-container">
+            <h2>Department Distribution</h2>
+            <div id="departmentChart" style="height: 200px;"></div>
+        </div>
+      
+        <!-- Last 24 Hours Activity Chart -->
+        <div class="chart-container">
+            <h2>Last 24 Hours Activity</h2>
+            <div id="chartLast24Hours" style="height: 200px;"></div>
+        </div>
+
+        <!-- Degree Distribution Chart -->
+        <div class="chart-container">
+            <h2>Degree Distribution</h2>
+            <div id="degreeChart" style="height: 200px;"></div>
+        </div>
+
+        <!-- Gender Distribution Chart -->
+        <div class="chart-container">
+            <h2>Gender Distribution</h2>
+            <div id="genderChart" style="height: 200px;"></div>
+        </div>
+        <!-- Last 30 Days Activity Chart -->
+        <div class="chart-container">
+            <h2>Last 30 Days Activity</h2>
+            <div id="chartLast30Days" style="height: 200px;"></div>
+        </div>
+        <!-- Provincial Distribution Chart -->
+        <div class="chart-container">
+            <h2>Provincial Distribution</h2>
+            <div id="provincialChart" style="height: 200px;"></div>
+        </div>
+
+        <div class="chart-container">
+            <h2>Submission Chart</h2>
+            <div id="chart" style="height: 200px;"></div>
+        </div>
+        <div class="status-grid">
+            <h2>Students Status Grid</h2>
+            <table>
+               
+                <tr>
+                    <th>Status</th>
+                    <th>Number of Students</th>
+                </tr>
+               
+                <tr>
+                    <td>Currently Studying</td>
+                    <td>@ViewBag.CurrentlyStudyingCount</td>
+                </tr>
+                <tr>
+                    <td>Recently Enrolled</td>
+                    <td>@ViewBag.RecentlyEnrolledCount</td>
+                </tr>
+                <tr>
+                    <td>About to Graduate</td>
+                    <td>@ViewBag.AboutToGraduateCount</td>
+                </tr>
+                <tr>
+                    <td>Graduated</td>
+                    <td>
+                        @ViewBag.GraduatedCount
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="full-width-chart-container">
+            <h2>Age Distribution </h2>
+            <div id="ageDistributionChart" style="height: 0px;"></div>
+
+        </div>
+        <div class="activity-lists-container">
+            <div class="activity-list">
+                <h3>Most Active Hours in last 30 days</h3>
+                <ul>
+                    <ul>
+                        <li>9 AM</li>
+                        <li>2 PM</li>
+                        <li>7 PM</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="activity-list">
+                <h3>Least Active Hours in last 30 days</h3>
+                <ul>
+                    <ul>
+                        <li>3 AM</li>
+                        <li>5 AM</li>
+                        <li>12 PM</li>
+                    </ul>
+                </ul>
+            </div>
+
+            <div class="activity-list">
+                <h3>Dead Hours in last 30 days</h3>
+                <ul>
+                    <ul>
+                        <li>1 AM</li>
+                        <li>4 AM</li>
+                        <li>6 AM</li>
+                        <li>5 AM</li>
+                       
+                    </ul>
+                </ul>
+            </div>
+        </div>
+        <div class="dashboard-container">
+        <h2>Distinct Interests:    </h2>
+        <div class="count-box">
+            <p> @ViewBag.DistinctInterestsCount</p>
+        </div>
+        </div>
+    </div>
+    <script>
+        // Example data for the pie charts
+        var departmentData = [25, 30, 15, 20, 10];
+        var degreeData = [40, 35, 25];
+        var genderData = [60, 40];
+        var provincialData = [25, 15, 44, 55, 41, 17];
+
+        // ApexCharts options for the pie charts
+        var departmentOptions = {
+            series: departmentData,
+            labels: ["IT", "Psycho", "Pharma", "Arts", "GD"],
+            chart: {
+                type: 'donut',
+            }
+        };
+
+        var degreeOptions = {
+            series: degreeData,
+            labels: ["BSIT", "BSCS", "BSSE", "DS", "MBBS" 
+            ],
+            chart: {
+                type: 'donut',
+            }
+        };
+
+        var genderOptions = {
+            series: genderData,
+            labels: ["Male", "Female"],
+            chart: {
+                type: 'donut',
+            }
+           
+        };
+
+        var provincialOptions = {
+            series: provincialData,
+            chart: {
+                width: '100%',
+                type: 'pie',
+            },
+            labels: ["1", "2", "3", "4", "5", "6"],
+            theme: {
+                monochrome: {
+                    enabled: true
+                }
+            },
+            plotOptions: {
+                pie: {
+                    dataLabels: {
+                        offset: -5
+                    }
+                }
+            },
+            title: {
+                text: "Provincial Distribution"
+            },
+            dataLabels: {
+                formatter(val, opts) {
+                    const name = opts.w.globals.labels[opts.seriesIndex]
+                    return [name, val.toFixed(1) + '%']
+                }
+            },
+            legend: {
+                show: false
+            }
+        };
+
+        // ApexCharts options for line chart
+        var lineChartOptions = {
+            series: [{
+                data: []
+            }],
+            chart: {
+                id: 'realtime',
+                height: 200,
+                type: 'line',
+                animations: {
+                    enabled: true,
+                    easing: 'linear',
+                    dynamicAnimation: {
+                        speed: 1000
+                    }
+                },
+                toolbar: {
+                    show: false
+                },
+                zoom: {
+                    enabled: false
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'smooth'
+            },
+            title: {
+                text: 'Dynamic Updating Chart',
+                align: 'left'
+            },
+            markers: {
+                size: 0
+            },
+            xaxis: {
+                type: 'datetime',
+            },
+            yaxis: {
+                max: 100
+            },
+            legend: {
+                show: false
+            }
+        };
+
+        // Render pie charts
+        var departmentChart = new ApexCharts(document.querySelector("#departmentChart"), departmentOptions);
+        departmentChart.render();
+
+        var degreeChart = new ApexCharts(document.querySelector("#degreeChart"), degreeOptions);
+        degreeChart.render();
+
+        var genderChart = new ApexCharts(document.querySelector("#genderChart"), genderOptions);
+        genderChart.render();
+
+        var provincialChart = new ApexCharts(document.querySelector("#provincialChart"), provincialOptions);
+        provincialChart.render();
+
+     
+        
+    </script>
+    <script>
+        // Dummy data for the age distribution bar chart
+        var ageDistributionData = [25, 30, 22, 27, 28, 24, 29, 32, 35, 31];
+
+        var ageDistributionOptions = {
+            series: [{
+                data: ageDistributionData
+            }],
+            chart: {
+                type: 'bar',
+                height: 350
+            },
+            plotOptions: {
+                bar: {
+                    borderRadius: 4,
+                    horizontal: true,
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: ['18','19', '20', '21', '22', '25'
+                ],
+            },
+            title: {
+                text: 'Age Distribution of Students',
+                align: 'left',
+                style: {
+                    fontSize: "16px",
+                    color: '#666'
+                }
+            },
+        };
+
+        var ageDistributionChart = new ApexCharts(document.querySelector("#ageDistributionChart"), ageDistributionOptions);
+        ageDistributionChart.render();
+    </script>
+
+    <script>
+        var data = @Html.Raw(Json.Serialize(submissionData)) || [];
+        console.log(data);
+        var dates = data.map(entry => entry.date);
+        var counts = data.map(entry => entry.count);
+        console.log(dates);
+        console.log(counts);
+        var options = {
+            series: [{
+                name: "Student Created",
+                data: dates
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'straight'
+            },
+            title: {
+                text: 'Students Created in a Month',
+                align: 'left'
+            },
+            grid: {
+                row: {
+                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                },
+            },
+            xaxis: {
+                categories: counts
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart"), options);
+        chart.render();
+
+    </script>
+
+    
+
+    <script>
+        // Ensure submissionData is not null
+        var chartData = @Html.Raw(Json.Serialize(chartData)) || [];
+        console.log(chartData);
+        var last30DaysCategories = chartData.map(entry => entry.timestamp);
+        var last30DaysDataPoints = chartData.map(entry => entry.id);
+        var options = {
+            series: [{
+                name: "Activities",
+                data: last30DaysDataPoints
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'straight'
+            },
+            title: {
+                text: 'Last 30 Days Activity',
+                align: 'left'
+            },
+            grid: {
+                row: {
+                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                },
+            },
+            xaxis: {
+                categories: last30DaysCategories.date
+            }
+        };
+
+        var chartLast30Days = new ApexCharts(document.querySelector("#chartLast30Days"), options);
+        chartLast30Days.render();
+    </script>
+    <script>
+        // Ensure submissionData is not null
+        var groupedData = {};
+        chartData.forEach(action => {
+            var timestamp = new Date(action.timestamp);
+            var key = new Date(timestamp.getFullYear(), timestamp.getMonth(), timestamp.getDate(), timestamp.getHours(), Math.floor(timestamp.getMinutes() / 15) * 15);
+            var keyString = key.toISOString();
+
+            if (!groupedData[keyString]) {
+                groupedData[keyString] = 0;
+            }
+
+            groupedData[keyString]++;
+        });
+
+        // Extract labels and data for the chart
+        var labels = Object.keys(groupedData);
+        var data = Object.values(groupedData);
+         var options = {
+            series: [{
+                name: "Number of Actions",
+                data: data
+            }],
+            chart: {
+                height: 350,
+                type: 'line',
+                zoom: {
+                    enabled: false
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            stroke: {
+                curve: 'straight'
+            },
+            title: {
+                text: 'Last 24 Hours Activity',
+                align: 'left'
+            },
+            grid: {
+                row: {
+                    colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                    opacity: 0.5
+                },
+            },
+            xaxis: {
+                categories: labels.Date
+            }
+        };
+
+        var chartLast24Hours = new ApexCharts(document.querySelector("#chartLast24Hours"), options);
+        chartLast24Hours.render();
+    </script>
+
+
+<!-- Add this script tag to include ApexCharts library -->
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+   
+   </body>
+</html>

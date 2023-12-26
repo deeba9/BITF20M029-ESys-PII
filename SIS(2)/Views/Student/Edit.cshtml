@@ -1,0 +1,76 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@model SIS_2_.Models.Domain.Student
+
+<h2>Edit Student</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-group">
+        <label for="FullName">Full Name:</label>
+        @Html.TextBoxFor(model => model.FullName, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label for="RollNumber">Roll Number:</label>
+        @Html.TextBoxFor(model => model.RollNumber, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="Email">Email:</label>
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label for="Gender">Gender:</label>
+        @Html.TextBoxFor(model => model.Gender, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label for="DateOfBirth">Date of Birth:</label>
+        @Html.TextBoxFor(model => model.DateOfBirth, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label for="City">City:</label>
+        @Html.TextBoxFor(model => model.City, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="InterestName">Interest Name:</label>
+        @Html.TextBoxFor(model => model.InterestName, new { @class = "form-control" })
+       
+    </div>
+  
+    <div class="form-group">
+        <label for="Department">Department:</label>
+        @Html.TextBoxFor(model => model.Department, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label for="DegreeTitle">Degree Title:</label>
+        @Html.TextBoxFor(model => model.DegreeTitle, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label for="Subject">Subject:</label>
+        @Html.TextBoxFor(model => model.Subject, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label for="StartDate">Start Date:</label>
+        @Html.TextBoxFor(model => model.StartDate, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <label for="EndDate">End Date:</label>
+        @Html.TextBoxFor(model => model.EndDate, new { @class = "form-control" })
+    </div>
+
+   
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
+}
+

@@ -1,0 +1,158 @@
+﻿@model StudentInputModel
+
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <title> Add Student </title>
+    <link rel="stylesheet" href="~/css/style2.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+        <div class="title">Add Student</div>
+        <div class="content">
+        <form asp-action="Create" method="post">
+                <div class="user-details">
+                    <div class="input-box">
+                        <label asp-for="FullName"></label>
+                        <input asp-for="FullName" placeholder="Enter FullName" />
+                        <span asp-validation-for="FullName"></span>
+                    </div>
+                    <div class="input-box">
+                        <label asp-for="RollNumber"></label>
+                        <input asp-for="RollNumber" placeholder="Enter RollNumber" />
+                        <span asp-validation-for="RollNumber"></span>
+
+                    </div>
+                    <div class="input-box">
+                        <label asp-for="Email"></label>
+                    <input asp-for="Email" placeholder="Enter Email" />
+                        <span asp-validation-for="Email"></span>
+                    </div>
+                  
+                    <div class="input-box">
+                        <label asp-for="Subject"></label>
+                    <input asp-for="Subject" placeholder="Enter Subject" />
+                        <span asp-validation-for="Subject"></span>
+                    </div>
+                  
+
+                    <div class="input-box">
+                        <label for="date" asp-for="DateOfBirth"></label>
+                        <input type="date" asp-for="DateOfBirth" />
+                        <span asp-validation-for="DateOfBirth"></span>
+                    </div>
+                    <div class="input-box">
+                        <label for="date" asp-for="StartDate"></label>
+                        <input type="date" asp-for="StartDate" />
+                        <span asp-validation-for="StartDate"></span>
+                    </div>
+                    <div class="input-box">
+                        <label for="date" asp-for="EndDate"></label>
+                        <input type="date" asp-for="EndDate" />
+                        <span asp-validation-for="EndDate"></span>
+                    </div>
+                    <div class="input-box">
+                        <div class="form-group">
+                            <label asp-for="InterestName" class="control-label"></label>
+                        <input asp-for="InterestName" list="interests" class="form-control" placeholder="Enter Interest" />
+                            <div class="select-wrapper">
+                            <datalist id="interests">
+                                @foreach (var item in ViewBag.AvailableInterests)
+                                {
+                                    <option value="@item.Text"></option>
+                                }
+                            </datalist>
+                            </div>
+                        </div>
+                        </div>
+                <div class="input-box">
+                    <label asp-for="City"></label>
+                    <div class="select-wrapper">
+                        <select asp-for="City">
+                            <option value="">Select City</option>
+                            <option value="Lahore">Lahore</option>
+                            <option value="Karachi">Karachi</option>
+                            <option value="Islamabad">Islamabad</option>
+                            <option value="Faislabad">Faislabad</option>
+                            <option value="Multan">Multan</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="City"></span>
+                </div>
+                <div class="input-box">
+                    <label asp-for="Department"></label>
+                    <div class="select-wrapper">
+
+                        <select asp-for="Department">
+                            <option value="">Select Department</option>
+                            <option value="Information Technology">Information Technology</option>
+                            <option value="Psychology">Psychology</option>
+                            <option value="Pharmacology">Pharmacology</option>
+                            <option value="Arts">Arts</option>
+                            <option value="Graphic Designing">Graphic Designing</option>
+                            <option value="Engineering">Engineering</option>
+                            <option value="Medical">Medical</option>
+                            <!-- Add more options if needed -->
+                        </select>
+
+                    </div>
+                    <span asp-validation-for="Department"></span>
+                </div>
+                <div class="input-box">
+
+                    <label asp-for="Gender"></label>
+                    <div class="select-wrapper">
+
+                        <select asp-for="Gender">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <!-- Add more options if needed -->
+                        </select>
+
+
+                    </div>
+                    <span asp-validation-for="Gender"></span>
+                </div>
+                <div class="input-box">
+                    <label asp-for="DegreeTitle"></label>
+                    <div class="select-wrapper">
+
+                        <select asp-for="DegreeTitle">
+                            <option value="">Select Degree Title</option>
+                            <option value="BSIT">BSIT</option>
+                            <option value="BSCS">BSCS</option>
+                            <option value="BSSE">BSSE</option>
+                            <option value="DS">DS</option>
+                            <option value="MBBS">MBBS</option>
+                            <option value="BA">BA</option>
+                            <option value="MBA">MBA</option>
+                            <option value="BBA">BBA</option>
+                            <option value="BCOM">BCOM</option>
+                            <!-- Add more options if needed -->
+                        </select>
+
+                    </div>
+                    <span asp-validation-for="DegreeTitle"></span>
+                </div>
+                </div>
+             
+                <div class="button">
+                <button type="submit" value="Create">Create</button>
+                </div>
+                <div class="button">
+                    <button onclick="cancelCreate()" type="submit">Cancel</button>
+                </div>
+               
+            </form>
+        </div>
+    
+
+    <script>
+        function cancelCreate() {
+            // Navigate back to the student list or another page
+            window.location.href = '@Url.Action("List", "Student")';
+        }
+    </script>
+</body>
+</html>

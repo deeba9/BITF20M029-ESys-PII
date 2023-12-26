@@ -1,0 +1,62 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@model SIS_2_.Models.Domain.Student
+
+<h2>Student Details</h2>
+
+<table class="table">
+    <tr>
+        <th>Full Name</th>
+        <td>@Html.DisplayFor(model => model.FullName)</td>
+    </tr>
+    <tr>
+        <th>Roll Number</th>
+        <td>@Html.DisplayFor(model => model.RollNumber)</td>
+    </tr>
+    <tr>
+        <th>Gender</th>
+        <td>@Html.DisplayFor(model => model.Gender)</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>@Html.DisplayFor(model => model.Email)</td>
+    </tr>
+    <tr>
+        <th>Date of Birth</th>
+        <td>@Html.DisplayFor(model => model.DateOfBirth)</td>
+    </tr>
+    <tr>
+        <th>Interest</th>
+        <td>@Html.DisplayFor(model => model.InterestName)</td>
+    </tr>
+    <tr>
+        <th>DegreeTitle</th>
+        <td>@Html.DisplayFor(model => model.DegreeTitle)</td>
+    </tr>
+    <tr>
+        <th>Department</th>
+        <td>@Html.DisplayFor(model => model.Department)</td>
+    </tr>
+    <tr>
+        <th>Subject</th>
+        <td>@Html.DisplayFor(model => model.Subject)</td>
+    </tr>
+    <tr>
+        <th>StartDate</th>
+        <td>@Html.DisplayFor(model => model.StartDate)</td>
+    </tr>
+    <tr>
+        <th>EndDate</th>
+        <td>@Html.DisplayFor(model => model.EndDate)</td>
+    </tr>
+ 
+    <!-- Add more properties as needed -->
+</table>
+
+@* Add links to navigate back to the student list or other actions *@
+<div>
+    @Html.ActionLink("Back to List", "List")
+</div>
+
